@@ -1,0 +1,47 @@
+diff -ru graphite2-1.3.10.orig/src/CMakeLists.txt graphite2-1.3.10/src/CMakeLists.txt
+--- graphite2-1.3.10.orig/src/CMakeLists.txt	2018-08-31 09:18:49.348599342 +0100
++++ graphite2-1.3.10/src/CMakeLists.txt	2018-08-31 09:18:51.906618095 +0100
+@@ -107,9 +107,9 @@
+                                             LT_VERSION_AGE ${GRAPHITE_API_AGE})
+ 
+ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+-    set_target_properties(graphite2 PROPERTIES 
+-        COMPILE_FLAGS   "-Wall -Wextra -Wno-unknown-pragmas -Wendif-labels -Wshadow -Wctor-dtor-privacy -Wnon-virtual-dtor -fno-rtti -fno-exceptions -fvisibility=hidden -fvisibility-inlines-hidden -fno-stack-protector"
+-        LINK_FLAGS      "-nodefaultlibs ${GRAPHITE_LINK_FLAGS}" 
++    set_target_properties(graphite2 PROPERTIES
++        COMPILE_FLAGS   "-Wall -Wextra -Wno-unknown-pragmas -Wendif-labels -Wshadow -Wctor-dtor-privacy -Wnon-virtual-dtor -fno-rtti -fno-exceptions -fvisibility=hidden -fvisibility-inlines-hidden"
++        LINK_FLAGS      "-nodefaultlibs ${GRAPHITE_LINK_FLAGS}"
+         LINKER_LANGUAGE C)
+     if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86|i.86")
+         add_definitions(-mfpmath=sse -msse2)
+@@ -137,9 +137,9 @@
+ endif (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+ 
+ if  (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+-    set_target_properties(graphite2 PROPERTIES 
+-        COMPILE_FLAGS   "-Wall -Wextra -Wno-unknown-pragmas -Wimplicit-fallthrough -Wendif-labels -Wshadow -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor -fno-rtti -fno-exceptions -fvisibility=hidden -fvisibility-inlines-hidden -fno-stack-protector -mfpmath=sse -msse2"
+-        LINK_FLAGS      "-nodefaultlibs" 
++    set_target_properties(graphite2 PROPERTIES
++        COMPILE_FLAGS   "-Wall -Wextra -Wno-unknown-pragmas -Wimplicit-fallthrough -Wendif-labels -Wshadow -Wno-ctor-dtor-privacy -Wno-non-virtual-dtor -fno-rtti -fno-exceptions -fvisibility=hidden -fvisibility-inlines-hidden -mfpmath=sse -msse2"
++        LINK_FLAGS      "-nodefaultlibs"
+         LINKER_LANGUAGE C)
+     target_link_libraries(graphite2 c)
+     include(Graphite)
+diff -ru graphite2-1.3.10.orig/tests/CMakeLists.txt graphite2-1.3.10/tests/CMakeLists.txt
+--- graphite2-1.3.10.orig/tests/CMakeLists.txt	2018-08-31 09:18:49.351599365 +0100
++++ graphite2-1.3.10/tests/CMakeLists.txt	2018-08-31 09:19:10.318753067 +0100
+@@ -47,12 +47,12 @@
+ else (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+ # don't -D GRAPHITE2_STATIC so that tests can see the API symbols in the static library 
+     set_target_properties(graphite2-base PROPERTIES 
+-        COMPILE_FLAGS       "-Wall -Wextra -fno-rtti -fno-exceptions -fno-stack-protector"
++        COMPILE_FLAGS       "-Wall -Wextra -fno-rtti -fno-exceptions"
+         COMPILE_DEFINITIONS "GRAPHITE2_NTRACING"
+         LINK_FLAGS          "-nodefaultlibs ${GRAPHITE_LINK_FLAGS}" 
+         LINKER_LANGUAGE     C)
+     set_target_properties(graphite2-segcache PROPERTIES 
+-        COMPILE_FLAGS       "-Wall -Wextra -fno-rtti -fno-exceptions -fno-stack-protector"
++        COMPILE_FLAGS       "-Wall -Wextra -fno-rtti -fno-exceptions"
+         COMPILE_DEFINITIONS "GRAPHITE2_NTRACING${TELEMETRY}"
+         LINK_FLAGS          "-nodefaultlibs ${GRAPHITE_LINK_FLAGS}" 
+         LINKER_LANGUAGE     C)

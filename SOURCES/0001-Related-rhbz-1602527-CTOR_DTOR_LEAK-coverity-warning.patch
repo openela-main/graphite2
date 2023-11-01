@@ -1,0 +1,31 @@
+From cf661dac92704ed738252f29b0925f15aee85609 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Thu, 19 Jul 2018 17:01:38 +0100
+Subject: [PATCH] Related: rhbz#1602527 CTOR_DTOR_LEAK coverity warning
+
+tests/featuremap/featuremaptest.cpp:180: alloc_new: Allocating memory by calling "new char[font_size]".
+tests/featuremap/featuremaptest.cpp:180: var_assign: Assigning: "this->_header" = "new char[font_size]".
+tests/featuremap/featuremaptest.cpp:180: ctor_dtor_leak: The constructor allocates field "_header" of "face_handle" but there is no destructor.
+---
+ tests/featuremap/featuremaptest.cpp | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tests/featuremap/featuremaptest.cpp b/tests/featuremap/featuremaptest.cpp
+index afbf339..901ea39 100644
+--- a/tests/featuremap/featuremaptest.cpp
++++ b/tests/featuremap/featuremaptest.cpp
+@@ -187,6 +187,11 @@ public:
+ 	    _dir = _header + dir_off;
+ 	}
+ 
++	~face_handle()
++	{
++		delete [] _header;
++	}
++
+ 	void replace_table(const TtfUtil::Tag name, const void * const data, size_t len) throw() {
+ 		_tables[name] = std::make_pair(data, len);
+ 	}
+-- 
+2.17.0
+

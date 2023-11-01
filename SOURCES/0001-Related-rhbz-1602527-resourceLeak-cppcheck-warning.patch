@@ -1,0 +1,24 @@
+From 0f04e6cbbb5ecda6356a5a1756f108154945cbed Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Mon, 23 Jul 2018 12:02:13 +0100
+Subject: [PATCH] Related: rhbz#1602527 resourceLeak cppcheck warning
+
+---
+ tests/comparerenderer/CompareRenderer.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tests/comparerenderer/CompareRenderer.cpp b/tests/comparerenderer/CompareRenderer.cpp
+index 31b185a..a848e65 100644
+--- a/tests/comparerenderer/CompareRenderer.cpp
++++ b/tests/comparerenderer/CompareRenderer.cpp
+@@ -371,6 +371,7 @@ int main(int argc, char ** argv)
+     {
+         fprintf(stderr, "Please specify at least 1 renderer\n");
+         showOptions();
++        if (rendererOptions[OptLogFile].exists()) fclose(log);
+         return -3;
+     }
+ 
+-- 
+2.17.0
+
