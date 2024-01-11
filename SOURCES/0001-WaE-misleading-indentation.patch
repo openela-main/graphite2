@@ -1,0 +1,25 @@
+From 168cc02731ddfc7c429fbe4af616000011e55789 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Mon, 23 Jul 2018 16:30:40 +0100
+Subject: [PATCH] WaE: misleading-indentation
+
+---
+ tests/endian/endiantest.cpp | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/tests/endian/endiantest.cpp b/tests/endian/endiantest.cpp
+index b4fa196..ddc55ad 100644
+--- a/tests/endian/endiantest.cpp
++++ b/tests/endian/endiantest.cpp
+@@ -138,9 +138,8 @@
+ 	const size_t rounds = 1UL << atoi(argv[1]);
+ 	int r = 0;
+ 
+-    if   (!test_swaps<uint64, uint32, uint16, uint8>()
+-       || !test_swaps<int64, int32, int16, int8>())
+-        return 5;
++	if (!test_swaps<uint64, uint32, uint16, uint8>() || !test_swaps<int64, int32, int16, int8>())
++		return 5;
+     
+ 	if (r == 0) r = test_reads<uint64, uint32, uint16, uint8>(rounds);
+ 	if (r == 0) r = test_reads<int64, int32, int16, int8>(rounds);

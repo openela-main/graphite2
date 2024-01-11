@@ -1,0 +1,25 @@
+From b94a1ab2983293cb666b5dca8012b993eb4947b5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Mon, 23 Jul 2018 14:54:58 +0100
+Subject: [PATCH] Related: rhbz#1602527 add comment to silence leaked_storage
+ for 'glyphs'
+
+---
+ src/GlyphCache.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/GlyphCache.cpp b/src/GlyphCache.cpp
+index 6d050ce..282bdc1 100644
+--- a/src/GlyphCache.cpp
++++ b/src/GlyphCache.cpp
+@@ -164,6 +164,7 @@ GlyphCache::GlyphCache(const Face & face, const uint32 face_options)
+         }
+         delete _glyph_loader;
+         _glyph_loader = 0;
++	// coverity[leaked_storage : FALSE] - calling read_glyph on index 0 saved glyphs
+     }
+ 
+     if (_glyphs && glyph(0) == 0)
+-- 
+2.17.0
+

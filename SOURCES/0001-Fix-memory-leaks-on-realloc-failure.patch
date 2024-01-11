@@ -1,0 +1,46 @@
+From 940d82895512737db2ad6b7698d8d7d140356a7e Mon Sep 17 00:00:00 2001
+From: Tim Eves <tim_eves@sil.org>
+Date: Thu, 16 Nov 2017 17:12:32 +0700
+Subject: [PATCH] Fix memory leaks on realloc failure
+
+Make sure the original buffer is cleaned up if realoc fails.
+---
+ src/Code.cpp | 6 +++++-
+ src/Pass.cpp | 3 ++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/Code.cpp b/src/Code.cpp
+index 92ba923..a5ec04e 100644
+--- a/src/Code.cpp
++++ b/src/Code.cpp
+@@ -219,7 +219,11 @@ Machine::Code::Code(bool is_constraint, const byte * bytecode_begin, const byte
+     if (_out)
+         *_out += total_sz;
+     else
+-        _code = static_cast<instr *>(realloc(_code, total_sz));
++    {
++      instr * const old_code = _code;
++      _code = static_cast<instr *>(realloc(_code, total_sz));
++      if (!_code) free(old_code);
++    }
+    _data = reinterpret_cast<byte *>(_code + (_instr_count+1));
+ 
+     if (!_code)
+diff --git a/src/Pass.cpp b/src/Pass.cpp
+index ae0e9df..1d45bf8 100644
+--- a/src/Pass.cpp
++++ b/src/Pass.cpp
+@@ -273,7 +273,9 @@ bool Pass::readRules(const byte * rule_map, const size_t num_entries,
+     byte * moved_progs = static_cast<byte *>(realloc(m_progs, prog_pool_free - m_progs));
+     if (e.test(!moved_progs, E_OUTOFMEM))
+     {
+-        if (prog_pool_free - m_progs == 0) m_progs = 0;
++        free(m_progs);
++        m_progs = 0;
++        // coverity[leaked_storage : FALSE] - can only get to here if moved_progs is nullptr
+         return face.error(e);
+     }
+ 
+-- 
+2.17.0
+
